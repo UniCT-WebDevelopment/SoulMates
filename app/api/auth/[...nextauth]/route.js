@@ -45,6 +45,7 @@ export const authOptions = {
                 token.bio = user.bio;
                 token.gender = user.gender
                 token.age = user.age;   
+                token.img = user.img;
             }
             console.log("this is the token = ", token);
             return token;
@@ -57,6 +58,7 @@ export const authOptions = {
                 session.user.bio = token.bio;
                 session.user.gender = token.gender
                 session.user.age = token.age;
+                session.user.img = token.img;
             }
             return session;
         },

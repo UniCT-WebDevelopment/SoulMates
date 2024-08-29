@@ -6,21 +6,23 @@ import SaveIcon from '@mui/icons-material/Save';
 import EmailIcon from '@mui/icons-material/AlternateEmail';
 import AgeIcon from '@mui/icons-material/CalendarMonth';
 import PasswordIcon from '@mui/icons-material/Password';
-import { useSession } from 'next-auth/react';
+import { useSession, signIn } from 'next-auth/react';
 
 const ProfileDashboard = () => {
   const { data: session, status } = useSession();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  
   const [profileImage, setProfileImage] = useState(null);
+  
   const [userData, setUserData] = useState({
-    name: '',
-    bio: '',
-    age: '',
-    email: '',
+    name: session?.user?.name || '',
+    bio: session?.user?.bio || '',
+    age:session?.user?.age || '',
+    email: session?.user?.email || '',
     password: '',
-    profileImageUrl: '',
+    profileImageUrl: session?.user?.img || '',
   });
 
   useEffect(() => {
@@ -63,48 +65,40 @@ const ProfileDashboard = () => {
     setLoading(true);
     try {
       let profileImageUrl = userData.profileImageUrl;
+  
+      if (profileImage) {
+        const reader = new FileReader();
+        reader.readAsDataURL(profileImage);
+        reader.onloadend = async () => {
+          const base64data = reader.result;
+  
+          // Invia l'immagine come Base64 al server e ottieni l'URL dell'immagine
+          const uploadResponse = await fetch('/api/users/upload', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId: session.user.id,
+              profileImage: base64data,
+            }),
+          });
+  
+          if (uploadResponse.ok) {
+            const data = await uploadResponse.json();
+            profileImageUrl = data.img;
+          } else {
+            console.error('Error uploading image');
+            return;
+          }
 
-      if (!profileImage) {
-        const formData = new FormData();
-        formData.append('file', profileImage);
-        /* formData.append('upload_preset', 'your_upload_preset');
-        formData.append('cloud_name', 'your_cloud_name');  */
-
-        const uploadResponse = await fetch('/api/users/userUpdateProfile', {
-          method: 'POST',
-          body: formData,
-        });
-
-        const uploadData = await uploadResponse.json();
-        profileImageUrl = uploadData.secure_url;
-      }
-
-      const response = await fetch('/api/users/userUpdateProfile', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId: session.user.id,
-          updateData: {
-            name: userData.name,
-            bio: userData.bio,
-            age: userData.age,
-            email: userData.email,
-            password: userData.password ? userData.password : undefined,
-            profileImageUrl: userData.profileImageUrl,
-          },
-        }),
-      });
-
-      const result = await response.json();
-      
-      if (result.success) {
-        setSnackbar({ open: true, message: 'Profile updated successfully', severity: 'success' });
+          await updateUserProfile(profileImageUrl);
+          await signIn('credentials', { redirect: false });
+        };
       } else {
-        throw new Error(result.error || 'Failed to update profile');
+        await updateUserProfile(profileImageUrl);
+        await signIn('credentials', { redirect: false });
       }
-
     } catch (error) {
       setSnackbar({ open: true, message: error.message, severity: 'error' });
     } finally {
@@ -112,7 +106,36 @@ const ProfileDashboard = () => {
       setIsEditing(false);
     }
   };
-
+  
+  const updateUserProfile = async (profileImageUrl) => {
+    console.log(profileImageUrl);
+    const response = await fetch('/api/users/userUpdateProfile', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: session.user.id,
+        updateData: {
+          name: userData.name,
+          bio: userData.bio,
+          age: userData.age,
+          email: userData.email,
+          password: userData.password ? userData.password : undefined,
+          img: profileImageUrl,
+        },
+      }),
+    });
+  
+    const result = await response.json();
+  
+    if (result.success) {
+      setSnackbar({ open: true, message: 'Profile updated successfully', severity: 'success' });
+    } else {
+      throw new Error(result.error || 'Failed to update profile');
+    }
+  };
+  
   return (
     <Card sx={{ height: 500, maxWidth: 800, margin: 'auto', padding: 3, boxShadow: 4 }} className='rounded-lg backdrop-blur-lg bg-black/30 text-white'>
       <Grid container spacing={3}>

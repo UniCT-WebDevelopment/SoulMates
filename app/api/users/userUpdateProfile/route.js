@@ -8,6 +8,8 @@ export async function POST(request) {
     try {
         const { userId, updateData } = await request.json();
         
+        console.log('Received updateData:', updateData); // Aggiungi questo log per verificare i dati
+
         if (!userId || !updateData) {
             throw new Error('Invalid data');
         }

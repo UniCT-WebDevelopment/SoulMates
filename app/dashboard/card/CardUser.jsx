@@ -4,16 +4,14 @@ import React, { useEffect, useState } from 'react';
 import ActionButtons from './actionbuttons/ActionButtons';
 import MoreButton from './morebutton/MoreButton';
 
-
 const CardUser = ({session}) => {
   const [userInCard, setUserInCard] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(null);
   const [oppositeGender, setOppositeGender] = useState('');
   const [swipeEffect, setSwipeEffect] = useState(false);
   const [likeEffect, setLikeEffect] = useState(false);
   const [dislikeEffect, setDislikeEffect] = useState(false);
   const [message, setMessage] = useState('');
-
 
   useEffect(() => {
     if(session?.user?.gender){
@@ -22,8 +20,29 @@ const CardUser = ({session}) => {
   }, [session]);
 
   useEffect(() => {
+    async function fetchCurrentIndex() {
+      console.log("id", session.user.id);
+      const res = await fetch(`/api/users/getCurrentIndex?userId=${session.user.id}`);
+      if (res.ok) {
+        const data = await res.json();
+        setCurrentIndex(data.currentIndex);
+        console.log("current",data.currentIndex);
+      } else {
+        console.error('Failed to fetch current index');
+      }
+    }
+  
+    if (session?.user?.id) {
+      fetchCurrentIndex();
+    }
+  }, [session]);
+
+  useEffect(() => {
     async function fetchSequentialUser() {
+      if (currentIndex === null || !oppositeGender) return; 
+
       const res = await fetch(`/api/users/sequential?index=${currentIndex}&gender=${oppositeGender}`);
+      
       if (res.ok) {
         const data = await res.json();
         setUserInCard(data);
@@ -32,20 +51,31 @@ const CardUser = ({session}) => {
         console.error('Failed to fetch user');
       }
     }
-    if(oppositeGender){
-      fetchSequentialUser();
-    }
+
     fetchSequentialUser();
   }, [currentIndex, oppositeGender]);
+
+  async function updateCurrentIndex(newIndex) {
+    const userId = session.user.id;
+    await fetch(`/api/users/updateIndex`, {
+      method: "POST",
+      headers: {
+        'Content-Type': "application/json"
+      },
+      body: JSON.stringify({ userId, newIndex })
+    });
+  }
 
   function handleNextUser() {
     setSwipeEffect(true);
 
     setTimeout(() => {
       setSwipeEffect(false);
-      setCurrentIndex((prevIndex) => prevIndex + 1);
-    },600);
-  };
+      const newIndex = currentIndex + 1;
+      setCurrentIndex(newIndex);
+      updateCurrentIndex(newIndex); // Sincronizza subito con il server
+    }, 600);
+  }
 
   /*LikeButton */
   const handleLike = async () => {
@@ -66,12 +96,16 @@ const CardUser = ({session}) => {
       if (data.match) {
         setMessage("E' Match signori, si potrebbe inzuppare il biscottino! ");
         setTimeout(() =>{
-          setCurrentIndex((prevIndex) => prevIndex + 1);
+          const newIndex = currentIndex + 1;
+          setCurrentIndex(newIndex);
+          updateCurrentIndex(newIndex);
         }, 800);
       } else {
         setMessage("Mi piace inviato");
         setTimeout(() =>{
-          setCurrentIndex((prevIndex) => prevIndex + 1);
+          const newIndex = currentIndex + 1;
+          setCurrentIndex(newIndex);
+          updateCurrentIndex(newIndex);
         }, 800);
       }
     } else {
@@ -85,11 +119,13 @@ const CardUser = ({session}) => {
 
     setTimeout(() => {
       setDislikeEffect(false);
-      setCurrentIndex((prevIndex) => prevIndex + 1);
-    }, 500)
-    
+      const newIndex = currentIndex + 1;
+      setCurrentIndex(newIndex);
+      updateCurrentIndex(newIndex);
+    }, 500);
   }
-  if (!userInCard) return <p>Loading...</p>;
+
+  if (currentIndex === null || !userInCard) return <p>Loading...</p>;
 
   return (
     <div className={`card h-[85%] w-[30%] p-2 rounded-2xl shadow-2xl backdrop-blur-lg bg-white/20
