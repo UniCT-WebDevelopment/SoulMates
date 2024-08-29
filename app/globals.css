@@ -15,15 +15,14 @@
     --background-end-rgb: 0, 0, 0;
   }
 }
+::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+body{
+  height: 100vh;
+  background: linear-gradient(to right, #7c3aed, #d946ef);
+
 }
 
 @layer utilities {
