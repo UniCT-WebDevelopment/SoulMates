@@ -45,7 +45,7 @@ const CardUser = ({session}) => {
     async function fetchSequentialUser() {
       if (currentIndex === null || !oppositeGender) return; 
 
-      const res = await fetch(`/api/users/sequential?index=${0}&gender=${oppositeGender}`);
+      const res = await fetch(`/api/users/sequential?index=${currentIndex}&gender=${oppositeGender}`);
       
       if (res.ok) {
         const data = await res.json();
@@ -77,7 +77,7 @@ const CardUser = ({session}) => {
       setSwipeEffect(false);
       const newIndex = currentIndex + 1;
       setCurrentIndex(newIndex);
-      updateCurrentIndex(newIndex); // Sincronizza subito con il server
+      updateCurrentIndex(newIndex); 
     }, 600);
   }
 
@@ -86,7 +86,7 @@ const CardUser = ({session}) => {
     setLikeEffect(true);  
     
     setTimeout(async () => {
-      setLikeEffect(false);  // Disattiva l'effetto del like
+      setLikeEffect(false);  
       const userId = session.user.id;
       const likedUserId = userInCard._id;  
       const res = await fetch("/api/likes", {
@@ -101,19 +101,19 @@ const CardUser = ({session}) => {
       if (data.success) {
         if (data.match) {
           setMessage("E' Match signori, si potrebbe inzuppare il biscottino!");
-          setCardVisible(false);  // Nasconde la card
-          setMatchMessageVisible(true);  // Mostra il messaggio di match
+          setCardVisible(false); 
+          setMatchMessageVisible(true); 
           setConfettiVisible(true);
   
-          // Dopo 2 secondi, nasconde il messaggio e mostra la card successiva
+          
           setTimeout(() => {
-            setMatchMessageVisible(false);  // Nasconde il messaggio di match
+            setMatchMessageVisible(false);  
             setConfettiVisible(false);
-            setCardVisible(true);  // Mostra la card successiva
+            setCardVisible(true);  
             const newIndex = currentIndex + 1;
             setCurrentIndex(newIndex);
             updateCurrentIndex(newIndex);
-          }, 4000);  // Durata dell'effetto match
+          }, 4000);  
         } else {
           setMessage("Mi piace inviato");
           const newIndex = currentIndex + 1;
@@ -123,7 +123,7 @@ const CardUser = ({session}) => {
       } else {
         setMessage("Errore: " + data.error);
       }
-    }, 1000);  // Durata dell'effetto like
+    }, 1000);  
   };
   
 
@@ -139,7 +139,7 @@ const CardUser = ({session}) => {
     }, 500);
   }
 
-  if (currentIndex === null || !userInCard) return <p>Loading...</p>;
+  if (currentIndex === null || !userInCard) return <p className='flex justify-center items-center'>Loading...</p>;
 
   return (
     <>
@@ -169,7 +169,7 @@ const CardUser = ({session}) => {
             </div>
   
             <div className='absolute inset-0 flex flex-col justify-end'>
-              <div className='p-4 bg-gradient-to-b from-transparent via-black/60 to-black/100 rounded-2xl'>
+              <div className='p-4 bg-gradient-to-b from-transparent via-black/60 to-black/100 rounded-xl'>
                 <h1 className='text-2xl font-bold text-white'>{userInCard.name}</h1>
                 <p className='text-sm text-white'>
                   {userInCard.bio}

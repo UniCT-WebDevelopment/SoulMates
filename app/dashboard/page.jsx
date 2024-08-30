@@ -7,7 +7,7 @@ const Dashboard = () => {
   const { data: session } = useSession();
 
   if (!session) {
-      return <p>Loading...</p>;
+      return <p className='flex justify-center items-center h-full'>Loading...</p>;
   }
 
   return (

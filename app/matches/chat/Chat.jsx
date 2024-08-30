@@ -33,7 +33,12 @@ const Chat = () => {
     <div className='flex h-full w-[70%]'>
       <div className='flex w-full gap-2'>
         <UserList onSelectUser={setSelectedUser} />
-        <div className="chat w-full h-full flex flex-col justify-between backdrop-blur-lg bg-black/30 p-2 rounded-lg ">
+        {!selectedUser && 
+          <h1 className='flex h-full w-full items-center justify-center text-wrap  text-white text-3xl  italic font-bold backdrop-blur-lg bg-black/30 p-2 rounded-lg'>
+            Seleziona un utente ed inizia a chattare!
+          </h1>}
+        {selectedUser && 
+          <div className="chat w-full h-full flex flex-col justify-between backdrop-blur-lg bg-black/30 p-2 rounded-lg ">
           <UserInfo selectedUser={selectedUser} />
           <div className='flex-grow overflow-y-auto'>
             {messages.map((msg, index) => (
@@ -45,6 +50,8 @@ const Chat = () => {
           </div>
           <InputBox selectedUser={selectedUser} />
         </div>
+        }
+        
       </div>
     </div>
   )
