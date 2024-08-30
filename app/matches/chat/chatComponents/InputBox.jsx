@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 // Inizializza la connessione socket
 const socket = io("http://localhost:5001");
 
-const InputBox = ({ selectedUser }) => {
+const InputBox = ({ selectedUser, setMessages }) => {
   const { data: session } = useSession();
   
   const [message, setMessage] = useState("");
@@ -20,7 +20,12 @@ const InputBox = ({ selectedUser }) => {
         receiverId: selectedUser._id,
         message: message,
       });
-
+      setMessages((prevMessages) => [
+        ...prevMessages, {
+          senderId: session.user.id,
+          message: message,
+        },
+      ]);
       setMessage(""); // Resetta il campo del messaggio dopo l'invio
     }
   };

@@ -45,10 +45,9 @@ const Chat = () => {
               <div key={index} className={`p-2 my-2 ${msg.senderId !== session.user.id ? 'text-left' : 'text-right'}`}>
                 <span className='bg-white/50 rounded-lg p-2'>{msg.message}</span>
               </div>
-              
             ))}
           </div>
-          <InputBox selectedUser={selectedUser} />
+          <InputBox selectedUser={selectedUser} setMessages={setMessages} />
         </div>
         }
         
