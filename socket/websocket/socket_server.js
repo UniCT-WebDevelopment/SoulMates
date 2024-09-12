@@ -24,6 +24,9 @@ io.on("connection", async (socket) => {
     console.log(`User con ID ${userId} registered with socket ID ${socket.id}`);
   });
 
+  socket.on("sendNotify", async ({ senderName }) => {
+    io.emit("notify", `Notifica da: ${senderName}`)
+  })
   socket.on('sendMessage', async ({ senderId, receiverId, message }) => {
     const receiverSocketId = users[receiverId];
     
@@ -48,6 +51,7 @@ io.on("connection", async (socket) => {
       console.error('Errore nel salvataggio del messaggio:', error);
     }
   });
+
 
   socket.on('disconnect', () => {
     console.log(`User disconnected: ${socket.id}`);
