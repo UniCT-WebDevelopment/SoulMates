@@ -3,18 +3,23 @@ import SendIcon from "@mui/icons-material/Send";
 import AddIcon from "@mui/icons-material/Add";
 import { io } from "socket.io-client";
 import { useSession } from 'next-auth/react';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const socket = io("http://localhost:5001");
-
 const InputBox = ({ selectedUser, setMessages }) => {
   const { data: session } = useSession();
   
   const [message, setMessage] = useState("");
 
-
   const handleSendMessage = () => {
     if (message.trim() !== "" && selectedUser) {
+      socket.emit("sendNotify", {
+        senderName: session.user.name,
+        receiverId: session.user._id,
+      });
+      toast("Notification Sent");
+
       socket.emit("sendMessage", {
         senderId: session.user.id,
         receiverId: selectedUser._id,
@@ -34,6 +39,7 @@ const InputBox = ({ selectedUser, setMessages }) => {
 
   return (
     <div className='chat flex justify-between w-full p-2 bg-black/30 rounded-lg'>
+      <ToastContainer />
       <button className='hover:bg-purple-100 rounded-full p-2'>
         <AddIcon sx={{
           color: 'white',

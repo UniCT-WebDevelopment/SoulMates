@@ -5,6 +5,8 @@ import UserList from './chatComponents/UserList';
 import UserInfo from './chatComponents/UserInfo';
 import { Menu as MenuIcon, Close as CloseIcon } from '@mui/icons-material'; // Menu icons from MUI
 import { IconButton } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import { useSession } from 'next-auth/react';
 import { io } from "socket.io-client";
 
@@ -16,7 +18,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const lastMessageRef = useRef(null); 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
