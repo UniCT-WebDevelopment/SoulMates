@@ -6,7 +6,12 @@ const SuperLikeButton = () => {
   return (
     <IconButton aria-label="" size="large">
       <Tooltip title="Super Like" placement='top'>
-        <StarIcon sx={{ fontSize: 35, color:"#00BFFF",}} />
+        <StarIcon sx={{ 
+          fontSize: {
+            xs: 30,
+            md: 35  
+          },
+          color:"#00BFFF",}} />
       </Tooltip>
     </IconButton>
   )

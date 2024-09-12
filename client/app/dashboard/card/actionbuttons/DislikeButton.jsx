@@ -6,7 +6,12 @@ const DisLikeButton = ( { onClick }) => {
   return (
     <IconButton aria-label="" size="large" onClick={ onClick }>
       <Tooltip title="I don't like it" placement='top'>
-        <BlockIcon sx={{ fontSize: 35, color: "red"}} />
+        <BlockIcon sx={{
+          fontSize: {
+            xs: 30,
+            md: 35  
+          },
+          color: "red"}} />
       </Tooltip>
     </IconButton>
   )

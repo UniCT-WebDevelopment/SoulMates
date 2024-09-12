@@ -146,13 +146,13 @@ const CardUser = ({session}) => {
       {confettiVisible && <Confetti />}
       
       {matchMessageVisible && (
-        <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-75 text-white text-4xl font-bold animate-rotate-and-color">
+        <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-75 text-white text-2xl md:text-4xl font-bold animate-rotate-and-color">
           It's a Match!
         </div>
       )}
   
       {cardVisible && (
-        <div className={`card h-[85%] w-[30%] p-2 rounded-2xl shadow-2xl backdrop-blur-lg bg-white/20
+        <div className={`card h-[85%] w-[90%] sm:w-[70%] md:w-[50%] lg:w-[40%] xl:w-[30%] p-2 rounded-2xl shadow-2xl backdrop-blur-lg bg-white/20
                          ${swipeEffect ? 'animate-swipe' : ''}
                          ${dislikeEffect ? 'animate-dislike' : ''}
                          ${likeEffect ? 'animate-like' : ''}`}>
@@ -170,7 +170,7 @@ const CardUser = ({session}) => {
   
             <div className='absolute inset-0 flex flex-col justify-end'>
               <div className='p-4 bg-gradient-to-b from-transparent via-black/60 to-black/100 rounded-xl'>
-                <h1 className='text-2xl font-bold text-white'>{userInCard.name}</h1>
+                <h1 className='text-xl md:text-2xl font-bold text-white'>{userInCard.name}</h1>
                 <p className='text-sm text-white'>
                   {userInCard.bio}
                 </p>
@@ -188,6 +188,7 @@ const CardUser = ({session}) => {
       )}
     </>
   );
+  
   
   
   

@@ -6,7 +6,12 @@ const PrevButton = () => {
   return (
     <IconButton aria-label="" size="large">
       <Tooltip title="Previous" placement='top'>
-        <PrevIcon sx={{ fontSize: 35, color: "white" }}  />
+        <PrevIcon sx={{ 
+          fontSize: {
+            xs: 30,
+            md: 35  
+          },
+          color: "white" }}  />
       </Tooltip>
     </IconButton>
   )

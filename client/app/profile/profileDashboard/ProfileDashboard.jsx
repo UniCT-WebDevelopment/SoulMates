@@ -137,7 +137,7 @@ const ProfileDashboard = () => {
   };
   
   return (
-    <Card sx={{ height: 300, maxWidth: 800, margin: 'auto', padding: 3, boxShadow: 4, overflow: "scroll"}} className='rounded-lg backdrop-blur-lg bg-black/30 text-white'>
+    <Card sx={{ height: {xs: 600, md:300}, maxWidth: 800, margin: 'auto', padding: 3, boxShadow: 4, overflow: "scroll"}} className='rounded-lg backdrop-blur-lg bg-black/30 text-white'>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4} textAlign="center">
           <Avatar

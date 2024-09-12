@@ -4,7 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { io } from "socket.io-client";
 import { useSession } from 'next-auth/react';
 
-// Inizializza la connessione socket
+
 const socket = io("http://localhost:5001");
 
 const InputBox = ({ selectedUser, setMessages }) => {
@@ -12,7 +12,7 @@ const InputBox = ({ selectedUser, setMessages }) => {
   
   const [message, setMessage] = useState("");
 
-  // Funzione per inviare il messaggio
+
   const handleSendMessage = () => {
     if (message.trim() !== "" && selectedUser) {
       socket.emit("sendMessage", {

@@ -34,7 +34,7 @@ const UserList = ({ onSelectUser }) => {
   };
 
   return (
-    <div className= 'p-2 drop-shadow-lg  bg-black/30 backdrop-blur-lg rounded-lg flex flex-col'>
+    <div className= 'p-2 drop-shadow-lg  bg-black/100 backdrop-blur-lg rounded-lg flex flex-col md:bg-transparent'>
       <div className='flex flex-col justify-between border-b-2 pb-2'> 
         <div className='flex justify-between items-center'>
           <h1 className='font-bold text-white'>Chats</h1>

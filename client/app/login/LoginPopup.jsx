@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+
 const LoginPopup = ({ toggleLoginPopup }) => {
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -29,24 +30,18 @@ const LoginPopup = ({ toggleLoginPopup }) => {
       setError("Something went wrong.");
     }
 
-
-/*     const response = await fetch('/api/auth/login', {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: { 'Content-Type': 'application/json' },
-    }); */
   };
 
   return (
     <div className="popup-overlay fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
-      <div className="popup-content bg-black text-white p-6 rounded-lg shadow-lg w-[30%]">
+      <div className="popup-content bg-black text-white p-4 md:p-6 rounded-lg shadow-lg w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] xl:w-[30%] max-w-[95%]">
         <button
-          className="close-button float-right bg-red-500 text-white p-1 rounded"
+          className="close-button float-right bg-red-500 h-8 w-8 md:h-10 md:w-10 rounded text-white p-1"
           onClick={toggleLoginPopup}
         >
           X
         </button>
-        <h2 className="text-4xl font-extraBold mb-4">Accedi</h2>
+        <h3 className="text-2xl md:text-4xl font-extrabold mb-4">Accedi</h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block mb-2">Email:</label>
@@ -54,7 +49,7 @@ const LoginPopup = ({ toggleLoginPopup }) => {
               type="email"
               className="w-full border p-2 rounded text-black"
               required
-              placeholder='Email'
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -65,12 +60,12 @@ const LoginPopup = ({ toggleLoginPopup }) => {
               type="password"
               className="w-full border p-2 rounded text-black"
               required
-              placeholder='Password'
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          {error && <span className='message'>{error}</span>}
+          {error && <span className="message">{error}</span>}
           <button
             type="submit"
             className="bg-purple-600 text-white p-2 rounded w-full"
@@ -81,6 +76,7 @@ const LoginPopup = ({ toggleLoginPopup }) => {
       </div>
     </div>
   );
+  
 };
 
 export default LoginPopup;

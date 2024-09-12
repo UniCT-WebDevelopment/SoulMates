@@ -7,7 +7,12 @@ const SuccButton = ({ onClick }) => {
     
       <IconButton aria-label="" size="large" onClick={onClick}>
         <Tooltip title="Next" placement='top'>
-          <SuccIcon sx={{ fontSize: 35, color: "white" }} /> 
+          <SuccIcon sx={{ 
+            fontSize: {
+              xs: 30,
+              md: 35  
+            },
+            color: "white" }} /> 
         </Tooltip> 
       </IconButton>
 
