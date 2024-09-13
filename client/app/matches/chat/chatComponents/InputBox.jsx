@@ -7,21 +7,17 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const socket = io("http://localhost:5001");
+
 const InputBox = ({ selectedUser, setMessages }) => {
   const { data: session } = useSession();
-  
   const [message, setMessage] = useState("");
 
   const handleSendMessage = () => {
     if (message.trim() !== "" && selectedUser) {
-      socket.emit("sendNotify", {
-        senderName: session.user.name,
-        receiverId: session.user._id,
-      });
-      toast("Notification Sent");
-
+      //Sul server attiva due eventi: receiveMessage & notify
       socket.emit("sendMessage", {
         senderId: session.user.id,
+        senderName: session.user.name,
         receiverId: selectedUser._id,
         message: message,
       });

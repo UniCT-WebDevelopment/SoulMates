@@ -9,25 +9,28 @@ import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from 'react';
 
 
-
+const socket = io("http://localhost:5001");
 const Dashboard = () => {
   const { data: session } = useSession();
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    const socket = io("http://localhost:5001");
+   
     if(session && session.user){
-      socket.on("notify", (message) => {
+      socket.on("notify", ({ senderName, message}) => {
         setMessage(message);
-        toast(message);
+        toast(
+          <div>
+             Messaggio da: <strong>{senderName} </strong>
+            <div> {message} </div>
+          </div>
+        );
       });
-      //Cleanup function to remove eventlistener
-      return() => {
-        socket.off("notify");
-        socket.disconnect();
-      };
     }
-  }, [])
+    return() => {
+      socket.off("notify");
+    };
+  }, [session])
   
   if (!session) {
       return <p className='flex justify-center items-center h-full'>Loading...</p>;
