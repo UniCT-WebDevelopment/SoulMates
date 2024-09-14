@@ -9,7 +9,7 @@ const UserList = ({ onSelectUser }) => {
   const [selectedUserId, setSelectedUserId] = useState(null); // Usa l'ID utente per tracciare l'utente selezionato
  
   useEffect(() => {
-    //trova gli utenti che hanno matchato con utente della sessione
+    //trova gli utenti che hanno matchato con l'utente
     async function fetchUsers() {
       if (session && session.user) {
         const userId = session.user.id; 

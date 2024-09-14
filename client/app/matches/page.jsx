@@ -1,6 +1,7 @@
 import React from 'react'
 import Chat from './chat/Chat'
 import NavbarApp from '../components/navbarApp/NavbarApp'
+
 const Matches = () => {
   return (
     <>
@@ -9,7 +10,6 @@ const Matches = () => {
             <Chat />
       </div>
     </>
-    
   )
 }
 

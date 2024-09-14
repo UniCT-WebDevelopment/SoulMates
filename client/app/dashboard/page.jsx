@@ -9,27 +9,30 @@ import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from 'react';
 
 
-const socket = io("http://localhost:5001");
+
 const Dashboard = () => {
   const { data: session } = useSession();
-  const [message, setMessage] = useState("");
+  const [notify, setNotify] = useState("");
 
   useEffect(() => {
-   
-    if(session && session.user){
-      socket.on("notify", ({ senderName, message}) => {
-        setMessage(message);
-        toast(
-          <div>
-             Messaggio da: <strong>{senderName} </strong>
-            <div> {message} </div>
-          </div>
-        );
-      });
+    const socket = io("http://localhost:5001");
+    if (session && session.user) {
+      socket.emit("register", (session.user.id));
     }
+
+    socket.on("notify", ({ senderName, message}) => {
+      setNotify(message);
+      toast(
+        <div>
+            Messaggio da: <strong>{senderName} </strong>
+          <div> {message} </div>
+        </div>
+      );
+    });
     return() => {
       socket.off("notify");
     };
+
   }, [session])
   
   if (!session) {

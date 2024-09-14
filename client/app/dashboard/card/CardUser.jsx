@@ -4,6 +4,7 @@ import Confetti from 'react-confetti';
 import React, { useEffect, useState } from 'react';
 import ActionButtons from './actionbuttons/ActionButtons';
 import MoreButton from './morebutton/MoreButton';
+import { useRouter } from "next/navigation";
 
 const CardUser = ({session}) => {
   const [userInCard, setUserInCard] = useState(null);
@@ -16,6 +17,9 @@ const CardUser = ({session}) => {
   const [cardVisible, setCardVisible] = useState(true);
   const [confettiVisible, setConfettiVisible] = useState(false);
   const [message, setMessage] = useState('');
+  const router = useRouter();
+
+
 
   useEffect(() => {
     if(session?.user?.gender){
@@ -84,7 +88,6 @@ const CardUser = ({session}) => {
   /*LikeButton */
   const handleLike = async () => {
     setLikeEffect(true);  
-    
     setTimeout(async () => {
       setLikeEffect(false);  
       const userId = session.user.id;
@@ -100,12 +103,11 @@ const CardUser = ({session}) => {
       const data = await res.json();
       if (data.success) {
         if (data.match) {
-          setMessage("E' Match signori, si potrebbe inzuppare il biscottino!");
+          setMessage("Match!");
           setCardVisible(false); 
           setMatchMessageVisible(true); 
           setConfettiVisible(true);
   
-          
           setTimeout(() => {
             setMatchMessageVisible(false);  
             setConfettiVisible(false);
@@ -113,7 +115,7 @@ const CardUser = ({session}) => {
             const newIndex = currentIndex + 1;
             setCurrentIndex(newIndex);
             updateCurrentIndex(newIndex);
-          }, 4000);  
+          }, 6000);  
         } else {
           setMessage("Mi piace inviato");
           const newIndex = currentIndex + 1;
@@ -139,6 +141,11 @@ const CardUser = ({session}) => {
     }, 500);
   }
 
+/* Start Chat Button visible after match */
+  const handleStartChat = () => {
+    router.replace("/matches")
+  }
+
   if (currentIndex === null || !userInCard) return <p className='flex justify-center items-center'>Loading...</p>;
 
   return (
@@ -146,9 +153,18 @@ const CardUser = ({session}) => {
       {confettiVisible && <Confetti />}
       
       {matchMessageVisible && (
-        <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-75 text-white text-2xl md:text-4xl font-bold animate-rotate-and-color">
-          It's a Match!
-        </div>
+        <>
+          <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-75 text-white text-2xl md:text-4xl font-bold animate-rotate-and-color">
+            It's a Match!
+            <div>
+              <button 
+              className='text-white text-xl bg-violet-700 rounded-lg p-2 hover:bg-white hover:text-purple-700'
+              onClick={handleStartChat}
+              > Inizia a chattare! </button>
+            </div>
+          </div>
+          
+        </>
       )}
   
       {cardVisible && (
@@ -164,7 +180,7 @@ const CardUser = ({session}) => {
               <img 
                 src={userInCard.img} 
                 alt={userInCard.name}
-                className='object-cover h-full rounded-xl'
+                className='object-cover h-full w-full rounded-xl'
               />
             </div>
   

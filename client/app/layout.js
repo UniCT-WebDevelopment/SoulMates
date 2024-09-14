@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
       
       <body className={inter.className}>
         <ClientLayout>
-          {children}
+            {children}
         </ClientLayout>
       </body>
     </html>
