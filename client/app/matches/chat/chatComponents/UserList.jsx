@@ -25,7 +25,37 @@ const UserList = ({ onSelectUser }) => {
     fetchUsers();
   }, [session]);
 
-  if (users.length === 0) return <p className='m-3'> Loading... </p>;
+  if (users.length === 0) return (
+    <>
+           <div className='flex flex-col justify-between border-b-2 pb-2'> 
+        <div className='flex justify-between items-center'>
+          <h1 className='font-bold text-white'>Chats</h1>
+          <button className='border-2 hover:bg-slate-200 hover:border-black rounded-full p-1'>
+            <NewChatIcon sx={{
+              color:'white',
+              '&:hover':{
+                color:"black",
+              }
+            }}/> 
+          </button>
+        </div>
+        <div className='flex mt=2'> 
+          <input type='text' placeholder='Search' className='p-2 rounded-full flex-grow backdrop-blur-lg bg-black/30 text-white'></input>
+          <button className='hover:bg-purple-100 rounded-full ml-1 p-2'>
+            <SearchIcon sx={{
+              color:'white',
+              '&:hover':{
+                color:"black",
+              }
+            }}/> 
+          </button>
+        </div>
+      </div>
+      <p className='m-3 font-bold'> Ops, non c'è nessuno qui! </p>
+    </>
+     
+  )
+    
 
   const handleUserClick = (user) => {
     console.log("Utente selezionato: " + user.name + " Con ID: " + user._id);
