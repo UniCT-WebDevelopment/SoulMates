@@ -5,7 +5,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import EmailIcon from '@mui/icons-material/AlternateEmail';
 import AgeIcon from '@mui/icons-material/CalendarMonth';
 import PasswordIcon from '@mui/icons-material/Password';
-import { useSession, signIn } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 
 const ProfileDashboard = () => {
@@ -84,14 +84,11 @@ const ProfileDashboard = () => {
             console.error('Error uploading image');
             return;
           }
-
           await updateUserProfile(profileImageUrl);
-          await fetchUpdatedUserData();
-
         };
       } else {
         await updateUserProfile(profileImageUrl);
-        await fetchUpdatedUserData();
+  
       }
     } catch (error) {
       setSnackbar({ open: true, message: error.message, severity: 'error' });
@@ -101,27 +98,7 @@ const ProfileDashboard = () => {
     }
   };
   
-  const fetchUpdatedUserData = async () => {
-    const response = await fetch(`/api/users/userDataProfile?userId=${session.user.id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  
-    if (response.ok) {
-      const data = await response.json();
-      setUserData({
-        name: data.name,
-        bio: data.bio,
-        age: data.age,
-        email: data.email,
-        profileImageUrl: data.img,
-      });
-    } else {
-      console.error('Error fetching updated user data');
-    }
-  };
+
   
   const updateUserProfile = async (profileImageUrl) => {
     console.log(profileImageUrl);

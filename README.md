@@ -16,6 +16,10 @@ First, run the development server:
 ```bash
 npm run dev
 ```
+Then run the socket server:
+```bash
+node socket_server.js
+```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
@@ -27,7 +31,5 @@ The server socket run on port 5001, if you get some problem, or the port is alre
 ## How works comunication? 
 Well, the components that use sockets are the components `Chat.jsx` and `InputBox.jsx` in `/matches` folder.
 The components use "const socket = io("http://localhost:5001");"  to connect to the server, change the port 5001 in this code if you have changed the port on the `socket_server.js`.
-
-## Learn More
 
 
